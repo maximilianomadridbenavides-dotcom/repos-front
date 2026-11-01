@@ -1,0 +1,7 @@
+{
+  "name": "repos-front",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "c8 --reporter=text --reporter=lcov node --test test/*.test.js" },
+  "devDependencies": { "c8": "^10.1.3" }
+}

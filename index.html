@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1220" />
+    <meta name="description" content="Catálogo local de repositorios para el reto Easysoft DevOps." />
+    <title>RepoScope | Catálogo DevOps</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="RepoScope, inicio">
+          <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+          <span>Repo<span class="brand-light">Scope</span></span>
+        </a>
+        <div class="topbar-meta">
+          <span class="environment"><span class="environment-dot"></span> DEMO LOCAL</span>
+          <span class="api-state" id="api-state" role="status" aria-live="polite">
+            <span class="state-dot"></span><span id="api-state-label">Conectando API</span>
+          </span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> CATÁLOGO DE INGENIERÍA</p>
+            <h1 id="page-title">Tus repositorios,<br /><span>en un solo lugar.</span></h1>
+            <p class="hero-description">Explora los proyectos de demostración que entrega la API del reto DevOps.</p>
+          </div>
+          <div class="hero-orbit" aria-hidden="true">
+            <div class="orbit orbit-outer"></div>
+            <div class="orbit orbit-inner"></div>
+            <div class="orbit-core"><span>&#123; &#125;</span></div>
+            <span class="orbit-node node-one"></span>
+            <span class="orbit-node node-two"></span>
+            <span class="orbit-node node-three"></span>
+          </div>
+        </section>
+
+        <section class="metrics" aria-label="Resumen de repositorios">
+          <article class="metric-card">
+            <span class="metric-label">REPOSITORIOS</span>
+            <strong class="metric-value" id="metric-total">—</strong>
+            <span class="metric-note">en el catálogo</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">EN MANTENIMIENTO</span>
+            <strong class="metric-value" id="metric-active">—</strong>
+            <span class="metric-note">disponibles para explorar</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">LENGUAJES</span>
+            <strong class="metric-value" id="metric-languages">—</strong>
+            <span class="metric-note">en uso</span>
+          </article>
+        </section>
+
+        <section class="catalog" aria-labelledby="catalog-title">
+          <div class="catalog-heading">
+            <div>
+              <p class="eyebrow section-eyebrow">DIRECTORIO</p>
+              <h2 id="catalog-title">Repositorios de prueba</h2>
+            </div>
+            <button class="refresh-button" id="refresh-button" type="button">
+              <span class="refresh-icon" aria-hidden="true">↻</span> Actualizar
+            </button>
+          </div>
+
+          <div class="toolbar">
+            <label class="search-box" for="search-input">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Buscar por nombre o descripción..." autocomplete="off" />
+            </label>
+            <label class="filter-label" for="language-filter">Lenguaje</label>
+            <select id="language-filter" aria-label="Filtrar por lenguaje">
+              <option value="all">Todos</option>
+            </select>
+          </div>
+
+          <div class="notice notice-loading" id="notice" role="status" aria-live="polite">
+            <span class="notice-spinner" aria-hidden="true"></span>
+            <span id="notice-message">Consultando repositorios...</span>
+          </div>
+          <div class="repo-grid" id="repo-grid" aria-live="polite"></div>
+          <p class="result-count" id="result-count"></p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span><span class="footer-mark">&lt;/&gt;</span> RepoScope · Reto DevOps</span>
+        <span>Frontend de demostración conectado a una API local</span>
+      </footer>
+    </div>
+  </body>
+</html>
