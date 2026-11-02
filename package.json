@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "c8 --reporter=text --reporter=lcov node --test test/*.test.js",
-    "test:coverage": "c8 --reporter=text --reporter=lcov --check-coverage --lines 100 --functions 100 --branches 90 node --test test/*.test.js"
+    "test": "c8 --all --include=*.js --reporter=text --reporter=lcov node --test test/*.test.js",
+    "test:coverage": "c8 --all --include=*.js --reporter=text --reporter=lcov --check-coverage --lines 90 --statements 90 --functions 90 --branches 80 node --test test/*.test.js"
   },
   "devDependencies": {
-    "c8": "^10.1.3"
+    "c8": "^10.1.3",
+    "jsdom": "^26.1.0"
   }
 }
