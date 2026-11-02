@@ -20,7 +20,7 @@ export function summarizeRepositories(repositories) {
 }
 
 export function listRepositoryLanguages(repositories) {
-  return [...new Set(repositories.map((repository) => repository.lenguaje))].sort();
+  return [...new Set(repositories.map((repository) => repository.lenguaje))].sort((left, right) => left.localeCompare(right, 'es'));
 }
 
 export function readRepositoryPayload(payload) {

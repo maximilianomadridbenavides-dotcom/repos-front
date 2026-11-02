@@ -23,11 +23,20 @@ function proxyToApi(request, response) {
   const upstream = http.request({
     hostname: '127.0.0.1',
     port: apiPort,
-    path: request.url,
-    method: request.method,
-    headers: { ...request.headers, host: `127.0.0.1:${apiPort}` },
+    path: '/api/repositorios',
+    method: 'GET',
+    headers: { Accept: 'application/json' },
   }, (apiResponse) => {
-    response.writeHead(apiResponse.statusCode || 502, apiResponse.headers);
+    if (apiResponse.statusCode >= 300 && apiResponse.statusCode < 400) {
+      apiResponse.resume();
+      response.writeHead(502, { 'Content-Type': 'application/json' });
+      response.end(JSON.stringify({ ok: false, error: 'Redirección de la API no permitida' }));
+      return;
+    }
+    response.writeHead(apiResponse.statusCode || 502, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-store',
+    });
     apiResponse.pipe(response);
   });
 
@@ -43,7 +52,7 @@ function proxyToApi(request, response) {
 const server = http.createServer((request, response) => {
   const pathname = new URL(request.url, 'http://localhost').pathname;
 
-  if (pathname.startsWith('/api/')) {
+  if (request.method === 'GET' && pathname === '/api/repositorios') {
     return proxyToApi(request, response);
   }
 

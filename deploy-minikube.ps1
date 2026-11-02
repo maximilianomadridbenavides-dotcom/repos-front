@@ -1,7 +1,7 @@
 param(
     [string]$Profile = 'devops-reto',
     [string]$Namespace = 'reto',
-    [string]$ImageTag = '1.0'
+    [string]$ImageTag = '1.1'
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -46,7 +46,7 @@ try {
     Invoke-Checked $helm @('upgrade', '--install', 'repos-front', './helm', '--kube-context', $Profile, '--namespace', $Namespace, '--create-namespace', '--set-string', "image.tag=$ImageTag", '--atomic', '--wait', '--timeout', '180s')
     Invoke-Checked $kubectl @('--context', $Profile, '-n', $Namespace, 'rollout', 'status', 'deployment/repos-front', '--timeout=180s')
     Invoke-Checked $kubectl @('--context', $Profile, '-n', $Namespace, 'get', 'pods,svc')
-    $payloadText = & $kubectl --context $Profile -n $Namespace exec deployment/repos-front -- wget -q -O - http://127.0.0.1/api/repositorios
+    $payloadText = & $kubectl --context $Profile -n $Namespace exec deployment/repos-front -- wget -q -O - http://127.0.0.1:8080/api/repositorios
     if ($LASTEXITCODE -ne 0) { throw 'Falló la consulta de Nginx hacia la API dentro de Kubernetes.' }
     $payload = $payloadText | ConvertFrom-Json
     if (-not $payload.ok -or $payload.total -ne 5 -or $payload.data.Count -ne 5) { throw 'El catálogo no cumple el contrato esperado.' }

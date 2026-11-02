@@ -141,4 +141,4 @@ languageFilter.addEventListener('change', (event) => {
 });
 document.querySelector('#refresh-button').addEventListener('click', loadRepositories);
 
-loadRepositories();
+void loadRepositories();

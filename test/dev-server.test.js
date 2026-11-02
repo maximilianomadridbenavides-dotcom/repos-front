@@ -5,8 +5,15 @@ import { once } from 'node:events';
 import { test } from 'node:test';
 
 test('servidor local: archivos públicos, métodos, proxy y API desconectada', { timeout: 15000 }, async (t) => {
+  let redirect = false;
   const upstream = http.createServer((req, res) => {
-    assert.equal(req.url, '/api/repositorios?limit=1');
+    assert.equal(req.url, '/api/repositorios');
+    assert.equal(req.headers['x-injected'], undefined);
+    if (redirect) {
+      res.writeHead(302, { Location: 'https://example.com' });
+      res.end();
+      return;
+    }
     res.writeHead(201, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: true }));
   });
@@ -37,12 +44,17 @@ test('servidor local: archivos públicos, métodos, proxy y API desconectada', {
   assert.equal(await head.text(), '');
   assert.equal((await fetch(base, { method: 'POST' })).status, 405);
   assert.equal((await fetch(base + '/package.json')).status, 404);
-  const proxied = await fetch(base + '/api/repositorios?limit=1');
+  assert.equal((await fetch(base + '/api/privado')).status, 404);
+  assert.equal((await fetch(base + '/api/repositorios', { method: 'POST' })).status, 405);
+  const proxied = await fetch(base + '/api/repositorios?limit=1', { headers: { 'X-Injected': 'no reenviar' } });
   assert.equal(proxied.status, 201);
   assert.deepEqual(await proxied.json(), { ok: true });
+  redirect = true;
+  const rejected = await fetch(base + '/api/repositorios', { redirect: 'manual' });
+  assert.equal(rejected.status, 502);
+  assert.equal(rejected.headers.get('location'), null);
   await new Promise(resolve => upstream.close(resolve));
   const unavailable = await fetch(base + '/api/repositorios');
   assert.equal(unavailable.status, 502);
   assert.equal((await unavailable.json()).ok, false);
 });
-
